@@ -7,7 +7,7 @@ from pydantic.networks import PostgresDsn
 BASEDIR: str = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 load_dotenv(os.path.join(BASEDIR, ".env"))
 
-# Postgres database settings
+# PostgreSQL database settings
 PG_DB_NAME: str = os.getenv("DB_NAME", default="postgres")
 PG_USER: str = os.getenv("POSTGRES_USER", default="postgres")
 PG_PASSWORD: str = os.getenv("POSTGRES_PASSWORD", default="postgres")
