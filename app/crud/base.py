@@ -1,4 +1,4 @@
-from typing import Generic, Optional, Type, TypeVar
+from typing import Generic, Optional, Type, TypeVar, Any
 
 from pydantic.types import UUID4
 from sqlalchemy.exc import NoResultFound
@@ -22,15 +22,18 @@ class BaseService(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         self.model = model
         self.db_session = db_session
 
-    async def list(self) -> list[ModelType]:
+    async def list(self, **kwargs: Any) -> list[ModelType]:
         """
         The list function returns a list of all ModelType objects in the database.
+
+        Args:
+            kwargs:: The id of the object
 
         Returns:
             A list of objects that are instances of the ModelType
         """
 
-        statement = select(self.model)
+        statement = select(self.model).filter_by(**kwargs)
         result = await self.db_session.execute(statement)
         objs: list[ModelType] = result.scalars().all()
         return objs
@@ -59,7 +62,7 @@ class BaseService(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
                 detail=f"{self.model.__name__.lower()} not found",
             )
 
-    async def create(self, obj: CreateSchemaType) -> Optional[ModelType]:
+    async def create(self, obj: CreateSchemaType, **kwargs) -> Optional[ModelType]:
         """
         The create function makes a new object of the type specified in the
         CreateSchemaType parameter. It takes an argument of obj which is an
@@ -72,7 +75,7 @@ class BaseService(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
             The created ModelType object
         """
 
-        db_obj: ModelType = self.model(**obj.dict())
+        db_obj: ModelType = self.model(**dict(**obj.dict(), **kwargs))
         self.db_session.add(db_obj)
         await self.db_session.commit()
         return db_obj
