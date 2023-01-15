@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 
-from .dependencies import validate_menu_model, validate_submenu_model
-from .endpoints import menu, submenu, dish
+from app.api.api_v1.endpoints import menu, submenu, dish
+from app.crud.dependencies import validate_menu_model, validate_submenu_model
 
 router = APIRouter()
 router.include_router(menu.router, prefix="/menus", tags=["Menus"])

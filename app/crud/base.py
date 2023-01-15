@@ -4,11 +4,15 @@ from pydantic.types import UUID4
 from sqlalchemy.exc import NoResultFound
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
-from starlette import status
-from starlette.exceptions import HTTPException
-from starlette.responses import JSONResponse
+from fastapi import status
+from fastapi.exceptions import HTTPException
+from fastapi.responses import JSONResponse
 
-from app.db.models import DefaultBase, DefaultUpdateBase, DefaultCreateBase
+from app.db.models import (
+    DefaultBase,
+    DefaultUpdateBase,
+    DefaultCreateBase,
+)
 
 ModelType = TypeVar("ModelType", bound=DefaultBase)
 CreateSchemaType = TypeVar("CreateSchemaType", bound=DefaultCreateBase)

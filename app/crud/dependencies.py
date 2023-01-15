@@ -1,7 +1,7 @@
 from fastapi import Request, Depends
 
-from .services.menu import MenuCRUDService, get_menu_service
-from .services.submenu import SubmenuCRUDService, get_submenu_service
+from app.crud.menu import MenuCRUDService, get_menu_service
+from app.crud.submenu import SubmenuCRUDService, get_submenu_service
 
 
 async def validate_menu_model(

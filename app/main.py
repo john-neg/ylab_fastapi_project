@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
-from app.api.api_v1 import api_v1
-from app.core.config import Settings
+from .api.api_v1 import api_v1
+from .core.config import Settings
 
 
 settings = Settings()

@@ -5,13 +5,10 @@ from pydantic.types import UUID4
 from starlette import status
 from starlette.responses import JSONResponse
 
-from app.db.models import Menu, MenuCreate, MenuUpdate
-from ..services.menu import MenuCRUDService, get_menu_service
+from app.crud.menu import MenuCRUDService, get_menu_service
+from app.db.models import Menu, MenuCreate, MenuUpdate, MenuRead
 
 router = APIRouter()
-
-
-
 
 
 @router.get("/", response_model=list[Menu])
@@ -21,7 +18,7 @@ async def list_menu(
     return await crud_service.list()
 
 
-@router.get("/{menu_id}", response_model=Menu)
+@router.get("/{menu_id}", response_model=MenuRead)
 async def get_menu(
     menu_id: UUID4,
     crud_service: MenuCRUDService = Depends(get_menu_service),

@@ -5,11 +5,15 @@ from pydantic.types import UUID4
 from starlette import status
 from starlette.responses import JSONResponse
 
-from app.db.models import Submenu, SubmenuCreate, SubmenuUpdate, Menu
-from ..dependencies import validate_menu_model
-from ..services.submenu import SubmenuCRUDService, get_submenu_service
+from app.crud.dependencies import validate_menu_model
+from app.crud.submenu import SubmenuCRUDService, get_submenu_service
+from app.db.models import Submenu, SubmenuCreate, SubmenuUpdate, Menu, SubmenuRead
 
 router = APIRouter()
+
+
+
+
 
 
 @router.get("/", response_model=list[Submenu])

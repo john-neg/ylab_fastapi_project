@@ -5,9 +5,9 @@ from pydantic.types import UUID4
 from starlette import status
 from starlette.responses import JSONResponse
 
+from app.crud.dependencies import validate_submenu_model
+from app.crud.dish import DishCRUDService, get_dish_service
 from app.db.models import Dish, DishCreate, DishUpdate, Menu
-from ..dependencies import validate_submenu_model
-from ..services.dish import DishCRUDService, get_dish_service
 
 router = APIRouter()
 

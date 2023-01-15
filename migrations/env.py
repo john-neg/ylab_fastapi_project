@@ -6,7 +6,7 @@ from sqlmodel import SQLModel, create_engine
 from sqlmodel.ext.asyncio.session import AsyncEngine
 
 from app.core.config import DATABASE_URL
-from app.db.models import Menu, Submenu
+from app.db.models import DefaultBase
 
 config = context.config
 config.set_main_option("sqlalchemy.url", DATABASE_URL)
@@ -15,7 +15,7 @@ config.set_main_option("sqlalchemy.url", DATABASE_URL)
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-target_metadata = SQLModel.metadata
+target_metadata = DefaultBase.metadata
 
 
 def run_migrations_offline() -> None:
