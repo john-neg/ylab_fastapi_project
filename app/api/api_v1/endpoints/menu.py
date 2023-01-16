@@ -2,8 +2,8 @@ from typing import List, Optional
 
 from fastapi import Depends, APIRouter
 from pydantic.types import UUID4
-from starlette import status
-from starlette.responses import JSONResponse
+from fastapi import status
+from fastapi.responses import JSONResponse
 
 from app.crud.menu import MenuCRUDService, get_menu_service
 from app.db.models import Menu, MenuCreate, MenuUpdate, MenuRead

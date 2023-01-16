@@ -1,6 +1,7 @@
 from typing import Generic, Optional, Type, TypeVar, Any
 
 from pydantic.types import UUID4
+from sqlalchemy import func
 from sqlalchemy.exc import NoResultFound
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
@@ -11,7 +12,7 @@ from fastapi.responses import JSONResponse
 from app.db.models import (
     DefaultBase,
     DefaultUpdateBase,
-    DefaultCreateBase,
+    DefaultCreateBase, Submenu, Dish,
 )
 
 ModelType = TypeVar("ModelType", bound=DefaultBase)

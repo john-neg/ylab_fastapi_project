@@ -1,9 +1,11 @@
 from fastapi import Depends
+from sqlalchemy import func
+from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.crud.base import BaseService
 from app.db.database import get_session
-from app.db.models import Submenu, SubmenuCreate, SubmenuUpdate
+from app.db.models import Submenu, SubmenuCreate, SubmenuUpdate, Dish
 
 
 class SubmenuCRUDService(BaseService[Submenu, SubmenuCreate, SubmenuUpdate]):

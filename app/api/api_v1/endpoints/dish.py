@@ -2,8 +2,8 @@ from typing import Optional, List
 
 from fastapi import APIRouter, Depends
 from pydantic.types import UUID4
-from starlette import status
-from starlette.responses import JSONResponse
+from fastapi import status
+from fastapi.responses import JSONResponse
 
 from app.crud.dependencies import validate_submenu_model
 from app.crud.dish import DishCRUDService, get_dish_service

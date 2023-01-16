@@ -1,8 +1,17 @@
+import asyncio
 import uuid
-from typing import Optional, List
+from typing import Optional, List, Any
 
+from fastapi import Depends
 from pydantic.types import UUID4, condecimal
-from sqlmodel import SQLModel, Field, Relationship
+from sqlalchemy.ext.hybrid import hybrid_property
+from sqlmodel import column
+from sqlmodel import func
+from sqlalchemy.orm import column_property, declared_attr
+from sqlmodel import SQLModel, Field, Relationship, select
+from sqlmodel.ext.asyncio.session import AsyncSession
+
+from app.db.database import get_session
 
 
 class DefaultBase(SQLModel):
@@ -80,13 +89,42 @@ class MenuUpdate(DefaultUpdateBase):
 class Submenu(DefaultUUIDBase, DefaultModelBase, table=True):
     """Submenu model class."""
 
+    def __init__(self, dishes_count: int, **data: Any):
+        super().__init__(**data)
+        self._dishes_count = dishes_count
+
     menu_id: UUID4 = Field(foreign_key="menu.id", nullable=False, index=True)
     menu: Menu = Relationship(back_populates="submenus")
-    dishes: List["Dish"] = Relationship(
+    dishes: list["Dish"] = Relationship(
         back_populates="submenu",
         sa_relationship_kwargs={"cascade": "all,delete", 'lazy': 'selectin'},
     )
-    # dishes_count: int
+
+    @hybrid_property
+    def dishes_count(self):
+        return self._dishes_count
+
+    @dishes_count.setter
+    async def set_attrib(self, dishes_count):
+        await asyncio.sleep(1.0)
+        self._dishes_count = dishes_count
+
+    # async def count_submenus(self, menu_id) -> int:
+    #     result = await self.db_session.scalar(
+    #         select(func.count(Submenu.id)).where(
+    #             Submenu.menu_id == menu_id,
+    #         )
+    #     )
+    #     return result
+    #
+    # async def count_dishes(self, menu_id, submenu_id) -> int:
+    #     result = await self.db_session.scalar(
+    #         select(func.count(Dish.id)).where(
+    #             Submenu.menu_id == menu_id,
+    #             Dish.submenu_id == submenu_id,
+    #         )
+    #     )
+    #     return result
 
 
 class SubmenuCreate(DefaultCreateBase):
@@ -98,7 +136,7 @@ class SubmenuCreate(DefaultCreateBase):
 class SubmenuRead(DefaultReadBase):
     """Submenu read class."""
 
-    # dishes_count: int
+    dishes_count: int = Field(alias="dishes_count")
 
 
 class SubmenuUpdate(DefaultUpdateBase):

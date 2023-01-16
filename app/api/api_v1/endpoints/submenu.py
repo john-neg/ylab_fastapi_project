@@ -2,18 +2,14 @@ from typing import Optional, List
 
 from fastapi import APIRouter, Depends
 from pydantic.types import UUID4
-from starlette import status
-from starlette.responses import JSONResponse
+from fastapi import status
+from fastapi.responses import JSONResponse
 
 from app.crud.dependencies import validate_menu_model
 from app.crud.submenu import SubmenuCRUDService, get_submenu_service
 from app.db.models import Submenu, SubmenuCreate, SubmenuUpdate, Menu, SubmenuRead
 
 router = APIRouter()
-
-
-
-
 
 
 @router.get("/", response_model=list[Submenu])
@@ -24,7 +20,7 @@ async def list_submenu(
     return await crud_service.list(menu_id=menu.id)
 
 
-@router.get("/{item_id}", response_model=Submenu)
+@router.get("/{item_id}", response_model=SubmenuRead)
 async def get_submenu(
     item_id: UUID4,
     crud_service: SubmenuCRUDService = Depends(get_submenu_service),
