@@ -2,7 +2,7 @@ import asyncio
 from logging.config import fileConfig
 
 from alembic import context
-from sqlmodel import SQLModel, create_engine
+from sqlmodel import create_engine
 from sqlmodel.ext.asyncio.session import AsyncEngine
 
 from app.core.config import DATABASE_URL

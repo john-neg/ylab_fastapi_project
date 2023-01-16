@@ -5,6 +5,7 @@ Homework project for Y_Lab University
 ## Description:
 
 Educational FastAPI project with full CRUD functionality and async operations.
+API Documentation and Schema available on title page (http://127.0.0.1:8000)
 
 ## Tech:
 
@@ -12,7 +13,7 @@ Based on:
 - Python 3.10
 - FastAPI 0.89.1
 - SQLModel 0.0.8
-- Alembic 1.9.1
+- Alembic 1.9.2
 - Uvicorn 0.20.0
 - PostgreSQL 15.0
 
@@ -32,7 +33,7 @@ DB_HOST=localhost
 DB_PORT=5432
 ```
 If you run app on local machine you can bypass this step and the app will use 
-the default above settings. 
+the default (above) settings. 
 
 ### Setup and activate venv
 
@@ -61,6 +62,8 @@ alembic upgrade head
 ```sh
 python3 run.py
 ```
+
+
 
 ## Author info:
 Evgeny Semenov

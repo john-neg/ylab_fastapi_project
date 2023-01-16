@@ -1,19 +1,14 @@
-from typing import Generic, Optional, Type, TypeVar, Any
+from typing import Any, Generic, Optional, Type, TypeVar
 
-from pydantic.types import UUID4
-from sqlalchemy import func
-from sqlalchemy.exc import NoResultFound
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlmodel import select
 from fastapi import status
 from fastapi.exceptions import HTTPException
 from fastapi.responses import JSONResponse
+from pydantic.types import UUID4
+from sqlalchemy.exc import NoResultFound
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlmodel import select
 
-from app.db.models import (
-    DefaultBase,
-    DefaultUpdateBase,
-    DefaultCreateBase, Submenu, Dish,
-)
+from app.db.models import DefaultBase, DefaultCreateBase, DefaultUpdateBase
 
 ModelType = TypeVar("ModelType", bound=DefaultBase)
 CreateSchemaType = TypeVar("CreateSchemaType", bound=DefaultCreateBase)
@@ -29,7 +24,7 @@ class BaseService(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
 
     async def list(self, **kwargs: Any) -> list[ModelType]:
         """
-        The list function returns a list of all ModelType objects in the database.
+        The list function returns all ModelType objects in the database.
 
         Args:
             kwargs:: The id of the object
@@ -53,7 +48,7 @@ class BaseService(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
             id_:UUID4: The id of the object
 
         Returns:
-            The object of ModelType that has the id parameter as its primary key
+            The object of ModelType that has the id param as its primary key
         """
 
         statement = select(self.model).where(self.model.id == id_)
@@ -67,7 +62,9 @@ class BaseService(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
                 detail=f"{self.model.__name__.lower()} not found",
             )
 
-    async def create(self, obj: CreateSchemaType, **kwargs) -> Optional[ModelType]:
+    async def create(
+            self, obj: CreateSchemaType, **kwargs
+    ) -> Optional[ModelType]:
         """
         The create function makes a new object of the type specified in the
         CreateSchemaType parameter. It takes an argument of obj which is an
@@ -83,9 +80,11 @@ class BaseService(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         db_obj: ModelType = self.model(**dict(**obj.dict(), **kwargs))
         self.db_session.add(db_obj)
         await self.db_session.commit()
-        return db_obj
+        return await self.get(db_obj.id)
 
-    async def update(self, id_: UUID4, obj: UpdateSchemaType) -> Optional[ModelType]:
+    async def update(
+            self, id_: UUID4, obj: UpdateSchemaType
+    ) -> Optional[ModelType]:
         """
         The update function updates an existing object in the database.
         It takes two arguments, id_ and obj. The id_ argument is the unique
@@ -94,7 +93,7 @@ class BaseService(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
 
         Args:
             id_:UUID4: Identify the object to update
-            obj:UpdateSchemaType: Specify the schema that is used to validate the data
+            obj:UpdateSchemaType: Specify the schema for data validation
 
         Returns:
             The updated object
