@@ -1,59 +1,95 @@
-from typing import AsyncGenerator, Callable, List
+import json
+import os
+from typing import Generator
 
 import pytest
-from fastapi import FastAPI
+import pytest_asyncio
 from httpx import AsyncClient
-from sqlmodel import create_engine, SQLModel, Session
+from sqlalchemy.ext.asyncio import create_async_engine
+from sqlalchemy.orm import sessionmaker
+from sqlmodel import SQLModel
 from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlmodel.pool import StaticPool
 
-from app.db.models import Menu
+from app.core.config import BASEDIR
+from app.db.database import get_session
+from app.db.models import Dish, Menu, Submenu
+from app.main import app
 
 
-@pytest.fixture(name="session")
-def session_fixture():
-    engine = create_engine(
-        "sqlite://", connect_args={"check_same_thread": False}, poolclass=StaticPool
+@pytest_asyncio.fixture
+async def async_client():
+    async with AsyncClient(
+            app=app, base_url="http://test"
+    ) as client:
+        yield client
+
+
+@pytest_asyncio.fixture(autouse=True)
+async def session_db_override(test_session) -> None:
+    def get_test_session() -> Generator[Generator, None, None]:
+        yield test_session
+
+    app.dependency_overrides[get_session] = get_test_session
+
+
+@pytest_asyncio.fixture(scope="function")
+async def test_session() -> AsyncSession:
+    async_engine = create_async_engine(
+        "sqlite+aiosqlite://", poolclass=StaticPool, future=True
     )
-    SQLModel.metadata.create_all(engine)
-    with Session(engine) as session:
+    async_session = sessionmaker(
+        async_engine, class_=AsyncSession, expire_on_commit=False
+    )
+
+    async with async_session() as session:
+        async with async_engine.begin() as connection:
+            await connection.run_sync(SQLModel.metadata.create_all)
+
         yield session
 
+    async with async_engine.begin() as connection:
+        await connection.run_sync(SQLModel.metadata.drop_all)
 
-@pytest.fixture(scope="function")
-async def client(app: FastAPI) -> AsyncGenerator:
-    async with AsyncClient(app=app, base_url="http://127.0.0.1") as ac:
-        yield ac
+    await async_engine.dispose()
 
 
-@pytest.fixture(scope="function")
-def override_get_session(session: AsyncSession) -> Callable:
-    async def _override_get_session():
-        yield session
-
-    return _override_get_session
+@pytest.fixture(autouse=True)
+def reset_dependency_overrides() -> Generator:
+    yield
+    app.dependency_overrides = {}
 
 
 @pytest.fixture(scope="function")
-def app(override_get_session: Callable) -> FastAPI:
-
-    from app.db.database import get_session
-
-    from app.main import app
-
-    app.dependency_overrides[get_session] = override_get_session
-    return app
+def test_data() -> dict:
+    path = os.path.join(BASEDIR, "tests/data/test_data.json")
+    with open(path, "r") as file:
+        return json.loads(file.read())
 
 
-@pytest.fixture(scope="function")
-async def create_and_get_menus(session: AsyncSession) -> List[str]:
-    list_menu_name = ["menu1", "menu2"]
-    menu = [
-        Menu(
-            title=name_tag, description=f"Description {name_tag}"
-        ) for name_tag in list_menu_name
-    ]
-    session.add_all(menu)
-    await session.commit()
-    yield list_menu_name
-    await session.rollback()
+@pytest_asyncio.fixture(autouse=True)
+async def initial_db_data(test_session: AsyncSession) -> dict:
+    path = os.path.join(BASEDIR, "tests/data/test_preload_db_data.json")
+    with open(path, "r") as file:
+        db_data = json.loads(file.read())
+    for menu in db_data['fill_menu']:
+        menu = Menu(**db_data['fill_menu'][menu])
+        test_session.add(menu)
+        await test_session.commit()
+    for submenu in db_data['fill_submenu']:
+        submenu = Submenu(**db_data['fill_submenu'][submenu])
+        test_session.add(submenu)
+        await test_session.commit()
+    for submenu in db_data['fill_submenu_m2']:
+        submenu = Submenu(**db_data['fill_submenu_m2'][submenu])
+        test_session.add(submenu)
+        await test_session.commit()
+    for dish in db_data['fill_dish']:
+        dish = Dish(**db_data['fill_dish'][dish])
+        test_session.add(dish)
+        await test_session.commit()
+    for dish in db_data['fill_dish_m2']:
+        dish = Dish(**db_data['fill_dish_m2'][dish])
+        test_session.add(dish)
+        await test_session.commit()
+    return db_data

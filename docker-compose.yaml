@@ -1,0 +1,47 @@
+version: '3.9'
+services:
+  db:
+    image: postgres:15.1-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./.env
+    environment:
+      - DB_NAME=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - DB_HOST=db
+      - DB_PORT=5432
+    networks:
+      - ylab_project_network
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - ./.env
+    environment:
+      - DB_NAME=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - DB_HOST=db
+      - DB_PORT=5432
+    entrypoint: >
+      sh -c "
+        echo 'Starting project...' &&
+        echo 'Applying migrations' &&
+        alembic upgrade head &&
+        uvicorn app.main:app --host 0.0.0.0 --reload
+      "
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+    networks:
+      - ylab_project_network
+    restart: always
+volumes:
+  postgres_data:
+networks:
+  ylab_project_network:
+    name: ylab_project_network

@@ -1,0 +1,121 @@
+{
+  "fill_menu": {
+    "menu1": {
+      "id": "f47d47e4-efb5-4700-8147-ddcc5987b1fc",
+      "title": "Menu 1",
+      "description": "Description Menu 1"
+    },
+    "menu2": {
+      "id": "f47d47e4-efb5-4700-8147-ddcc5987b1fa",
+      "title": "Menu 2",
+      "description": "Description Menu 2"
+    }
+  },
+  "check_menu": {
+    "menu1": {
+      "id": "f47d47e4-efb5-4700-8147-ddcc5987b1fc",
+      "title": "Menu 1",
+      "description": "Description Menu 1",
+      "submenus_count": 2,
+      "dishes_count": 2
+    },
+    "menu2": {
+      "id": "f47d47e4-efb5-4700-8147-ddcc5987b1fa",
+      "title": "Menu 2",
+      "description": "Description Menu 2",
+      "submenus_count": 1,
+      "dishes_count": 1
+    }
+  },
+  "fill_submenu": {
+    "submenu1": {
+      "id": "127c9770-456c-478d-a086-e8e313e64d68",
+      "title": "Submenu 1",
+      "description": "Description Submenu 1",
+      "menu_id": "f47d47e4-efb5-4700-8147-ddcc5987b1fc"
+    },
+    "submenu2": {
+      "id": "127c9770-456c-478d-a086-e8e313e64d69",
+      "title": "Submenu 2",
+      "description": "Description Submenu 2",
+      "menu_id": "f47d47e4-efb5-4700-8147-ddcc5987b1fc"
+    }
+  },
+  "check_submenu": {
+    "submenu1": {
+      "id": "127c9770-456c-478d-a086-e8e313e64d68",
+      "title": "Submenu 1",
+      "description": "Description Submenu 1",
+      "dishes_count": 2
+    },
+    "submenu2": {
+      "id": "127c9770-456c-478d-a086-e8e313e64d69",
+      "title": "Submenu 2",
+      "description": "Description Submenu 2",
+      "dishes_count": 0
+    }
+  },
+  "fill_submenu_m2": {
+    "submenu3": {
+      "id": "127c9770-456c-478d-a086-e8e313e64d70",
+      "title": "Submenu 3",
+      "description": "Description Submenu 3",
+      "menu_id": "f47d47e4-efb5-4700-8147-ddcc5987b1fa"
+    }
+  },
+  "check_submenu_m2": {
+    "submenu3": {
+      "id": "127c9770-456c-478d-a086-e8e313e64d70",
+      "title": "Submenu 3",
+      "description": "Description Submenu 3",
+      "dishes_count": 1
+    }
+  },
+  "fill_dish": {
+    "dish1": {
+      "id": "ce3d3b68-4075-44b2-8343-74e863ea83f0",
+      "title": "Dish 1",
+      "description": "Description Dish 1",
+      "submenu_id": "127c9770-456c-478d-a086-e8e313e64d68",
+      "price": "12.50"
+    },
+    "dish2": {
+      "id": "ce3d3b68-4075-44b2-8343-74e863ea83f1",
+      "title": "Dish 2",
+      "description": "Description Dish 2",
+      "submenu_id": "127c9770-456c-478d-a086-e8e313e64d68",
+      "price": "13.50"
+    }
+  },
+  "check_dish": {
+    "dish1": {
+      "id": "ce3d3b68-4075-44b2-8343-74e863ea83f0",
+      "title": "Dish 1",
+      "description": "Description Dish 1",
+      "price": "12.50"
+    },
+    "dish2": {
+      "id": "ce3d3b68-4075-44b2-8343-74e863ea83f1",
+      "title": "Dish 2",
+      "description": "Description Dish 2",
+      "price": "13.50"
+    }
+  },
+  "fill_dish_m2": {
+    "dish3": {
+      "id": "ce3d3b68-4075-44b2-8343-74e863ea83f2",
+      "title": "Dish 3",
+      "description": "Description Dish 3",
+      "submenu_id": "127c9770-456c-478d-a086-e8e313e64d70",
+      "price": "10.50"
+    }
+  },
+  "check_dish_m2": {
+    "dish3": {
+      "id": "ce3d3b68-4075-44b2-8343-74e863ea83f2",
+      "title": "Dish 3",
+      "description": "Description Dish 3",
+      "price": "10.50"
+    }
+  }
+}

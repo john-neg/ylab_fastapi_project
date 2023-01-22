@@ -1,0 +1,135 @@
+{
+  "menu_create": {
+    "payload": {
+      "title": "Menu 3",
+      "description": "Description Menu 3"
+    },
+    "check": {
+      "title": "Menu 3",
+      "description": "Description Menu 3",
+      "submenus_count": 0,
+      "dishes_count": 0
+    }
+  },
+  "menu_update": {
+    "id": "f47d47e4-efb5-4700-8147-ddcc5987b1fa",
+    "payload": {
+      "title": "Updated Menu 2",
+      "description": "Updated Description Menu 2"
+    },
+    "check": {
+      "title": "Updated Menu 2",
+      "description": "Updated Description Menu 2",
+      "submenus_count": 1,
+      "dishes_count": 1
+    }
+  },
+  "menu_revert": {
+    "id": "f47d47e4-efb5-4700-8147-ddcc5987b1fa",
+    "payload": {
+      "title": "Reverted Menu 2",
+      "description": "Reverted Description Menu 2"
+    },
+    "check": {
+      "title": "Reverted Menu 2",
+      "description": "Reverted Description Menu 2",
+      "submenus_count": 1,
+      "dishes_count": 1
+    }
+  },
+    "menu_delete": {
+    "id": "f47d47e4-efb5-4700-8147-ddcc5987b1fa"
+  },
+  "submenu_create": {
+    "payload": {
+      "title": "Submenu 4",
+      "description": "Description Submenu 4"
+    },
+    "check": {
+      "title": "Submenu 4",
+      "description": "Description Submenu 4",
+      "dishes_count": 0
+    }
+  },
+  "submenu_update": {
+    "id": "127c9770-456c-478d-a086-e8e313e64d68",
+    "payload": {
+      "title": "Updated Submenu 1",
+      "description": "Updated Description Submenu 1"
+    },
+    "check": {
+      "title": "Updated Submenu 1",
+      "description": "Updated Description Submenu 1",
+      "dishes_count": 2
+    }
+  },
+  "submenu_revert": {
+    "id": "127c9770-456c-478d-a086-e8e313e64d68",
+    "payload": {
+      "title": "Reverted Submenu 1",
+      "description": "Reverted Description Submenu 1"
+    },
+    "check": {
+      "title": "Reverted Submenu 1",
+      "description": "Reverted Description Submenu 1",
+      "dishes_count": 2
+    }
+  },
+    "submenu_delete": {
+    "id": "127c9770-456c-478d-a086-e8e313e64d68"
+  },
+    "dish_create": {
+    "payload": {
+      "title": "Dish 4",
+      "description": "Description Dish 4",
+      "price": "1.50"
+    },
+    "check": {
+      "title": "Dish 4",
+      "description": "Description Dish 4",
+      "price": "1.50"
+    }
+  },
+  "dish_update": {
+    "id": "ce3d3b68-4075-44b2-8343-74e863ea83f0",
+    "payload": {
+      "title": "Updated Dish 1",
+      "description": "Updated Description Dish 1",
+      "price": "10.50"
+    },
+    "check": {
+      "title": "Updated Dish 1",
+      "description": "Updated Description Dish 1",
+      "price": "10.50"
+    }
+  },
+  "dish_revert": {
+    "id": "ce3d3b68-4075-44b2-8343-74e863ea83f0",
+    "payload": {
+      "title": "Reverted Dish 1",
+      "description": "Reverted Description Dish 1",
+      "price": "12.50"
+    },
+    "check": {
+      "title": "Reverted Dish 1",
+      "description": "Reverted Description Dish 1",
+      "price": "12.50"
+    }
+  },
+    "dish_decimals": {
+    "id": "ce3d3b68-4075-44b2-8343-74e863ea83f0",
+    "payload": {
+      "title": "Updated Dish 1",
+      "description": "Updated Description Dish 1",
+      "price": 10.55443434
+    },
+    "check": {
+      "title": "Updated Dish 1",
+      "description": "Updated Description Dish 1",
+      "price": "10.55"
+    }
+  },
+    "dish_delete": {
+    "id": "ce3d3b68-4075-44b2-8343-74e863ea83f0"
+    }
+}
