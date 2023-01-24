@@ -12,6 +12,11 @@ services:
       - POSTGRES_PASSWORD=postgres
       - DB_HOST=db
       - DB_PORT=5432
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready" ]
+      interval: 5s
+      timeout: 10s
+      retries: 100
     networks:
       - ylab_project_network
   api:
@@ -34,7 +39,8 @@ services:
         uvicorn app.main:app --host 0.0.0.0 --reload
       "
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     ports:
       - "8000:8000"
     networks:
