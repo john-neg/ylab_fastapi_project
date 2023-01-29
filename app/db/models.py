@@ -61,7 +61,13 @@ class Menu(DefaultUUIDBase, DefaultModelBase, table=True):
 class MenuCreate(DefaultCreateBase):
     """Menu create class."""
 
-    pass
+    class Config:
+        schema_extra = {
+            "example": {
+                "title": "My menu",
+                "description": "My menu description",
+            },
+        }
 
 
 class MenuRead(DefaultReadBase):
@@ -74,7 +80,13 @@ class MenuRead(DefaultReadBase):
 class MenuUpdate(DefaultUpdateBase):
     """Menu update class."""
 
-    pass
+    class Config:
+        schema_extra = {
+            "example": {
+                "title": "My updated menu",
+                "description": "My updated menu description",
+            },
+        }
 
 
 class Submenu(DefaultUUIDBase, DefaultModelBase, table=True):

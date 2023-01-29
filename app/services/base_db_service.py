@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from typing import Any, Generic, Optional, Type, TypeVar
 
 from fastapi import status
@@ -10,17 +11,18 @@ from sqlmodel import select
 
 from app.db.models import DefaultBase, DefaultCreateBase, DefaultUpdateBase
 
+
 ModelType = TypeVar("ModelType", bound=DefaultBase)
 CreateSchemaType = TypeVar("CreateSchemaType", bound=DefaultCreateBase)
 UpdateSchemaType = TypeVar("UpdateSchemaType", bound=DefaultUpdateBase)
 
 
-class BaseService(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
-    """Base CRUD class with list, get, create, update & delete methods."""
+@dataclass
+class BaseDbService(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
+    """Base DB service class with list, get, create, update & delete methods."""
 
-    def __init__(self, model: Type[ModelType], db_session: AsyncSession):
-        self.model = model
-        self.db_session = db_session
+    model: Type[ModelType]
+    db_session: AsyncSession
 
     async def list(self, **kwargs: Any) -> list[ModelType]:
         """
@@ -63,7 +65,7 @@ class BaseService(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
             )
 
     async def create(
-            self, obj: CreateSchemaType, **kwargs
+        self, obj: CreateSchemaType, **kwargs
     ) -> Optional[ModelType]:
         """
         The create function makes a new object of the type specified in the
@@ -83,7 +85,7 @@ class BaseService(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         return await self.get(db_obj.id)
 
     async def update(
-            self, id_: UUID4, obj: UpdateSchemaType
+        self, id_: UUID4, obj: UpdateSchemaType
     ) -> Optional[ModelType]:
         """
         The update function updates an existing object in the database.

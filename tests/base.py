@@ -6,7 +6,7 @@ from httpx import AsyncClient
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from app.crud.base import ModelType
+from app.services.base_db_service import ModelType
 
 
 class BaseApiCRUDTests(object):
