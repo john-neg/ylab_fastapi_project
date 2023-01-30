@@ -1,6 +1,6 @@
 import json
 import os
-from typing import Generator
+from collections.abc import Generator
 
 import pytest
 import pytest_asyncio
@@ -20,7 +20,8 @@ from app.main import app
 @pytest_asyncio.fixture
 async def async_client():
     async with AsyncClient(
-            app=app, base_url="http://test"
+        app=app,
+        base_url='http://test',
     ) as client:
         yield client
 
@@ -33,13 +34,17 @@ async def session_db_override(test_session) -> None:
     app.dependency_overrides[get_session] = get_test_session
 
 
-@pytest_asyncio.fixture(scope="function")
+@pytest_asyncio.fixture(scope='function')
 async def test_session() -> AsyncSession:
     async_engine = create_async_engine(
-        "sqlite+aiosqlite://", poolclass=StaticPool, future=True
+        'sqlite+aiosqlite://',
+        poolclass=StaticPool,
+        future=True,
     )
     async_session = sessionmaker(
-        async_engine, class_=AsyncSession, expire_on_commit=False
+        async_engine,
+        class_=AsyncSession,
+        expire_on_commit=False,
     )
 
     async with async_session() as session:
@@ -60,17 +65,17 @@ def reset_dependency_overrides() -> Generator:
     app.dependency_overrides = {}
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope='function')
 def test_data() -> dict:
-    path = os.path.join(BASEDIR, "tests/data/test_data.json")
-    with open(path, "r") as file:
+    path = os.path.join(BASEDIR, 'tests/data/test_data.json')
+    with open(path) as file:
         return json.loads(file.read())
 
 
 @pytest_asyncio.fixture(autouse=True)
 async def initial_db_data(test_session: AsyncSession) -> dict:
-    path = os.path.join(BASEDIR, "tests/data/test_preload_db_data.json")
-    with open(path, "r") as file:
+    path = os.path.join(BASEDIR, 'tests/data/test_preload_db_data.json')
+    with open(path) as file:
         db_data = json.loads(file.read())
     for menu in db_data['fill_menu']:
         menu = Menu(**db_data['fill_menu'][menu])

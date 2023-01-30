@@ -1,12 +1,10 @@
 version: '3.9'
 services:
   test_api:
-    container_name: ylab_project_tests
+    container_name: fastapi_project_tests
     build:
       context: .
       dockerfile: Dockerfile
-    env_file:
-      - ./.env
     environment:
       - REDIS_HOST=redis
       - REDIS_PORT=6379

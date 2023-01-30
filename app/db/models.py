@@ -1,5 +1,4 @@
 import uuid
-from typing import List, Optional
 
 from pydantic.types import UUID4, condecimal
 from sqlmodel import Field, Relationship, SQLModel
@@ -45,16 +44,16 @@ class DefaultReadBase(DefaultUUIDBase, DefaultModelBase):
 class DefaultUpdateBase(DefaultBase):
     """Base update class for menus and dishes."""
 
-    title: Optional[str]
-    description: Optional[str]
+    title: str | None
+    description: str | None
 
 
 class Menu(DefaultUUIDBase, DefaultModelBase, table=True):
     """Menu model class."""
 
-    submenus: List["Submenu"] = Relationship(
-        back_populates="menu",
-        sa_relationship_kwargs={"cascade": "all,delete", "lazy": "selectin"},
+    submenus: list['Submenu'] = Relationship(
+        back_populates='menu',
+        sa_relationship_kwargs={'cascade': 'all,delete', 'lazy': 'selectin'},
     )
 
 
@@ -63,9 +62,9 @@ class MenuCreate(DefaultCreateBase):
 
     class Config:
         schema_extra = {
-            "example": {
-                "title": "My menu",
-                "description": "My menu description",
+            'example': {
+                'title': 'My menu',
+                'description': 'My menu description',
             },
         }
 
@@ -82,9 +81,9 @@ class MenuUpdate(DefaultUpdateBase):
 
     class Config:
         schema_extra = {
-            "example": {
-                "title": "My updated menu",
-                "description": "My updated menu description",
+            'example': {
+                'title': 'My updated menu',
+                'description': 'My updated menu description',
             },
         }
 
@@ -92,18 +91,24 @@ class MenuUpdate(DefaultUpdateBase):
 class Submenu(DefaultUUIDBase, DefaultModelBase, table=True):
     """Submenu model class."""
 
-    menu_id: UUID4 = Field(foreign_key="menu.id", nullable=False, index=True)
-    menu: Menu = Relationship(back_populates="submenus")
-    dishes: list["Dish"] = Relationship(
-        back_populates="submenu",
-        sa_relationship_kwargs={"cascade": "all,delete", "lazy": "selectin"},
+    menu_id: UUID4 = Field(foreign_key='menu.id', nullable=False, index=True)
+    menu: Menu = Relationship(back_populates='submenus')
+    dishes: list['Dish'] = Relationship(
+        back_populates='submenu',
+        sa_relationship_kwargs={'cascade': 'all,delete', 'lazy': 'selectin'},
     )
 
 
 class SubmenuCreate(DefaultCreateBase):
     """Submenu create class."""
 
-    pass
+    class Config:
+        schema_extra = {
+            'example': {
+                'title': 'My submenu',
+                'description': 'My submenu description',
+            },
+        }
 
 
 class SubmenuRead(DefaultReadBase):
@@ -115,7 +120,13 @@ class SubmenuRead(DefaultReadBase):
 class SubmenuUpdate(DefaultUpdateBase):
     """Submenu update class."""
 
-    pass
+    class Config:
+        schema_extra = {
+            'example': {
+                'title': 'My updated submenu',
+                'description': 'My updated submenu description',
+            },
+        }
 
 
 class Dish(DefaultUUIDBase, DefaultModelBase, table=True):
@@ -123,17 +134,25 @@ class Dish(DefaultUUIDBase, DefaultModelBase, table=True):
 
     price: condecimal(decimal_places=2) = Field(default=None)
     submenu_id: UUID4 = Field(
-        foreign_key="submenu.id",
+        foreign_key='submenu.id',
         nullable=False,
         index=True,
     )
-    submenu: Submenu = Relationship(back_populates="dishes")
+    submenu: Submenu = Relationship(back_populates='dishes')
 
 
 class DishCreate(DefaultCreateBase):
     """Dish create class."""
 
     price: condecimal(decimal_places=2)
+
+    class Config:
+        schema_extra = {
+            'example': {
+                'title': 'My dish',
+                'description': 'My dish description',
+            },
+        }
 
 
 class DishRead(DefaultReadBase):
@@ -145,4 +164,13 @@ class DishRead(DefaultReadBase):
 class DishUpdate(DefaultUpdateBase):
     """Dish update class."""
 
-    price: Optional[condecimal(decimal_places=2)]
+    price: condecimal(decimal_places=2) | None
+
+    class Config:
+        schema_extra = {
+            'example': {
+                'title': 'My updated dish',
+                'description': 'My updated dish description',
+                'price': '10.50',
+            },
+        }

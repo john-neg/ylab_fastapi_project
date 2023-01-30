@@ -2,14 +2,18 @@ from fastapi import APIRouter, Depends, status
 from fastapi.responses import JSONResponse
 from pydantic.types import UUID4
 
+from app.db.models import Menu, SubmenuCreate, SubmenuRead, SubmenuUpdate
 from app.services.dependencies import validate_menu_model
 from app.services.submenu import SubmenuCRUDService, get_submenu_service
-from app.db.models import Menu, SubmenuCreate, SubmenuRead, SubmenuUpdate
 
 router = APIRouter()
 
 
-@router.get("/", response_model=list[SubmenuRead])
+@router.get(
+    '/',
+    summary='Получить список подменю',
+    response_model=list[SubmenuRead],
+)
 async def list_submenu(
     service: SubmenuCRUDService = Depends(get_submenu_service),
     menu: Menu = Depends(validate_menu_model),
@@ -17,7 +21,11 @@ async def list_submenu(
     return await service.list(menu_id=menu.id)
 
 
-@router.get("/{item_id}", response_model=SubmenuRead)
+@router.get(
+    '/{item_id}',
+    summary='Получить детальную информацию о подменю',
+    response_model=SubmenuRead,
+)
 async def get_submenu(
     item_id: UUID4,
     service: SubmenuCRUDService = Depends(get_submenu_service),
@@ -26,7 +34,10 @@ async def get_submenu(
 
 
 @router.post(
-    "/", response_model=SubmenuRead, status_code=status.HTTP_201_CREATED
+    '/',
+    summary='Создать подменю',
+    response_model=SubmenuRead,
+    status_code=status.HTTP_201_CREATED,
 )
 async def add_submenu(
     item_create: SubmenuCreate,
@@ -36,7 +47,11 @@ async def add_submenu(
     return await service.create(item_create, menu_id=menu.id)
 
 
-@router.patch("/{item_id}", response_model=SubmenuRead)
+@router.patch(
+    '/{item_id}',
+    summary='Изменить подменю',
+    response_model=SubmenuRead,
+)
 async def update_submenu(
     item_id: UUID4,
     item_update: SubmenuUpdate,
@@ -45,7 +60,7 @@ async def update_submenu(
     return await service.update(item_id, item_update)
 
 
-@router.delete("/{item_id}")
+@router.delete('/{item_id}', summary='Удалить подменю')
 async def delete_submenu(
     item_id: UUID4,
     service: SubmenuCRUDService = Depends(get_submenu_service),

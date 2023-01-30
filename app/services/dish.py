@@ -2,11 +2,11 @@ from aioredis import Redis
 from fastapi import Depends
 
 from app.db.cache import get_cache
+from app.db.database import get_session
+from app.db.models import Dish, DishCreate, DishRead, DishUpdate
 from app.services.base_cache_service import BaseCacheService
 from app.services.base_crud_service import BaseCRUDService
 from app.services.base_db_service import BaseDbService
-from app.db.database import get_session
-from app.db.models import Dish, DishCreate, DishUpdate, DishRead
 
 
 class DishModelService(BaseDbService[Dish, DishCreate, DishUpdate]):
@@ -23,7 +23,7 @@ class DishCRUDService(BaseCRUDService[DishRead, DishCreate, DishUpdate]):
 
 async def get_dish_service(
     cache: Redis = Depends(get_cache),
-    session=Depends(get_session)
+    session=Depends(get_session),
 ) -> DishCRUDService:
     """
     The get_dish_service function returns a DishCRUDService object. The
@@ -33,5 +33,5 @@ async def get_dish_service(
         cache=BaseCacheService(cache),
         db_service=DishModelService(Dish, session),
         read_model=DishRead,
-        items_cache_list='dishes_list'
+        items_cache_list='dishes_list',
     )

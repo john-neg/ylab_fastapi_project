@@ -9,7 +9,7 @@ from app.core.config import settings
 
 
 @dataclass
-class BaseCacheService(object):
+class BaseCacheService:
     """Base service for a Redis-based cache."""
 
     cache: Redis
