@@ -1,6 +1,8 @@
 import json
 import os
 from collections.abc import Generator
+from dataclasses import dataclass, field
+from typing import Any
 
 import pytest
 import pytest_asyncio
@@ -12,9 +14,29 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlmodel.pool import StaticPool
 
 from app.core.config import BASEDIR
+from app.db.cache import get_cache
 from app.db.database import get_session
 from app.db.models import Dish, Menu, Submenu
 from app.main import app
+
+
+@dataclass
+class FakeCacheService:
+    """Fake cache service."""
+
+    storage: dict = field(default_factory=dict)
+
+    async def set(self, key: str, value: Any, **kwargs):
+        """Sets an object to the cache."""
+        self.storage[key] = value
+
+    async def get(self, key: str):
+        """Gets an object from the cache."""
+        return self.storage.get(key)
+
+    async def delete(self, key: str):
+        """Removes an object from the cache."""
+        return self.storage.pop(key, None)
 
 
 @pytest_asyncio.fixture
@@ -57,6 +79,20 @@ async def test_session() -> AsyncSession:
         await connection.run_sync(SQLModel.metadata.drop_all)
 
     await async_engine.dispose()
+
+
+@pytest_asyncio.fixture(autouse=True)
+async def cache_override(test_cache) -> None:
+    def get_test_cache() -> Generator[Generator, None, None]:
+        yield test_cache
+
+    app.dependency_overrides[get_cache] = get_test_cache
+
+
+@pytest_asyncio.fixture(scope='function')
+async def test_cache() -> FakeCacheService:
+    redis = FakeCacheService()
+    return redis
 
 
 @pytest.fixture(autouse=True)
