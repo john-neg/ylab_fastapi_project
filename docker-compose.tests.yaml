@@ -5,9 +5,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    environment:
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
     command: "pytest -vv"
     networks:
       - fastapi_project_network

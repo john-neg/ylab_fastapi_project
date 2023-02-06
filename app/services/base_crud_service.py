@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 from typing import Generic, TypeVar
 
+from fastapi.responses import JSONResponse
 from pydantic.types import UUID4
-from starlette.responses import JSONResponse
 
 from app.db.models import DefaultReadBase
 from app.services.base_cache_service import BaseCacheService
@@ -13,7 +13,7 @@ from app.services.base_db_service import (
     UpdateSchemaType,
 )
 
-ReadSchemaType = TypeVar('ReadSchemaType', bound=DefaultReadBase)
+ReadSchemaType = TypeVar("ReadSchemaType", bound=DefaultReadBase)
 
 
 @dataclass
@@ -25,7 +25,7 @@ class BaseCRUDService(
     read_model: type[ReadSchemaType]
     items_cache_list: str
 
-    def process_db_data(self, item: ModelType):
+    def process_db_data(self, item: ModelType) -> ReadSchemaType:
         """
         The process_db_data function takes in a ModelType object and returns
         the data in that object as a dictionary. This function is used to
@@ -33,7 +33,7 @@ class BaseCRUDService(
         """
         return self.read_model.parse_obj(item.dict())
 
-    async def list(self, **kwargs) -> list[dict]:
+    async def list(self, **kwargs) -> list[ReadSchemaType]:
         """The list function returns all object items from the database."""
         items_list = await self.cache.get(self.items_cache_list)
         if not items_list:
@@ -42,7 +42,7 @@ class BaseCRUDService(
             await self.cache.set(self.items_cache_list, items_list)
         return items_list
 
-    async def get(self, item_id: UUID4) -> dict:
+    async def get(self, item_id: UUID4) -> ReadSchemaType:
         """
         The get function is used to retrieve a single item. It takes an id as
         input and returns the corresponding object. If no such object exists,
@@ -59,7 +59,7 @@ class BaseCRUDService(
         self,
         item_create_schema: CreateSchemaType,
         **kwargs,
-    ) -> dict:
+    ) -> ReadSchemaType:
         """
         The create function creates a new item in the database, set it to cache
         and returns it. It also deletes all related cached items, so that they
@@ -79,7 +79,7 @@ class BaseCRUDService(
         self,
         item_id: UUID4,
         item_update_schema: UpdateSchemaType,
-    ) -> dict:
+    ) -> ReadSchemaType:
         """
         The update function updates an existing item in the database and cache.
         It returns a dictionary with all the fields from that object.

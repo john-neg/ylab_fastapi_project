@@ -12,7 +12,7 @@ async def get_cache() -> Redis:
     redis = aioredis.from_url(
         settings.REDIS_URL,
         max_connections=10,
-        encoding='utf8',
+        encoding="utf8",
         decode_responses=True,
     )
     return redis

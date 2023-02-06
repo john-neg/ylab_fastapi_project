@@ -4,13 +4,9 @@ services:
     container_name: fastapi_project_postgres
     image: postgres:15.1-alpine
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
-    environment:
-      - DB_NAME=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - DB_HOST=db
-      - DB_PORT=5432
+      - postgres_data:/var/lib/postgresql/data
+    env_file:
+      - .env.example
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready" ]
       interval: 5s
@@ -24,9 +20,28 @@ services:
     expose:
       - 6379
     ports:
-      - "9000:6379"
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
     healthcheck:
       test: [ "CMD", "redis-cli", "ping" ]
+      interval: 5s
+      timeout: 10s
+      retries: 200
+    networks:
+      - fastapi_project_network
+  rabbitmq:
+    container_name: fastapi_project_rabbitmq
+    image: rabbitmq:3.11.8-management
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    env_file:
+      - .env.example
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: [ "CMD", "rabbitmqctl", "status" ]
       interval: 5s
       timeout: 10s
       retries: 200
@@ -37,14 +52,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    environment:
-      - DB_NAME=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - DB_HOST=db
-      - DB_PORT=5432
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
+    env_file:
+      - .env.example
     entrypoint: >
       sh -c "
         echo 'Starting project...' &&
@@ -57,13 +66,37 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     ports:
       - "8000:8000"
+    volumes:
+      - api_data:/app/files
     networks:
       - fastapi_project_network
     restart: always
+  celery-worker:
+    container_name: fastapi_project_celery_worker
+    build: .
+    env_file:
+      - .env.example
+    command: celery -A app.core.celery_app:celery worker --loglevel=INFO -P threads
+    links:
+      - api
+    volumes:
+      - api_data:/app/files
+    networks:
+      - fastapi_project_network
+    depends_on:
+      api:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
 volumes:
   postgres_data:
+  api_data:
+  redis_data:
+  rabbitmq_data:
 networks:
   fastapi_project_network:
     name: fastapi_project_network

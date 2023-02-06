@@ -27,8 +27,8 @@ class MenuCRUDService(BaseCRUDService[MenuRead, MenuCreate, MenuUpdate]):
         """
         data = {
             **menu.dict(),
-            'submenus_count': len(menu.submenus),
-            'dishes_count': sum(
+            "submenus_count": len(menu.submenus),
+            "dishes_count": sum(
                 [len(submenu.dishes) for submenu in menu.submenus],
             ),
         }
@@ -48,5 +48,5 @@ async def get_menu_service(
         cache=BaseCacheService(cache),
         db_service=MenuModelService(Menu, db_session),
         read_model=MenuRead,
-        items_cache_list='menus_list',
+        items_cache_list="menus_list",
     )

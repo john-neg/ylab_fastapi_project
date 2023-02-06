@@ -33,5 +33,5 @@ async def get_dish_service(
         cache=BaseCacheService(cache),
         db_service=DishModelService(Dish, session),
         read_model=DishRead,
-        items_cache_list='dishes_list',
+        items_cache_list="dishes_list",
     )

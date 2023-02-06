@@ -31,7 +31,7 @@ class SubmenuCRUDService(
         """
         data = {
             **submenu.dict(),
-            'dishes_count': submenu.dishes.__len__(),
+            "dishes_count": submenu.dishes.__len__(),
         }
         return self.read_model.parse_obj(data)
 
@@ -50,5 +50,5 @@ async def get_submenu_service(
         cache=BaseCacheService(cache),
         db_service=SubmenuModelService(Submenu, db_session),
         read_model=SubmenuRead,
-        items_cache_list='submenus_list',
+        items_cache_list="submenus_list",
     )

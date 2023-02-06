@@ -26,6 +26,8 @@ Based on:
 - PostgreSQL 15.1
 - Docker 20.10.22
 - Redis 7.0.1
+- Celery 5.2.7
+- RabbitMQ 3.11.8
 
 ## Setup Guide
 

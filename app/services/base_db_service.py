@@ -11,9 +11,9 @@ from sqlmodel import select
 
 from app.db.models import DefaultBase, DefaultCreateBase, DefaultUpdateBase
 
-ModelType = TypeVar('ModelType', bound=DefaultBase)
-CreateSchemaType = TypeVar('CreateSchemaType', bound=DefaultCreateBase)
-UpdateSchemaType = TypeVar('UpdateSchemaType', bound=DefaultUpdateBase)
+ModelType = TypeVar("ModelType", bound=DefaultBase)
+CreateSchemaType = TypeVar("CreateSchemaType", bound=DefaultCreateBase)
+UpdateSchemaType = TypeVar("UpdateSchemaType", bound=DefaultUpdateBase)
 
 
 @dataclass
@@ -60,7 +60,7 @@ class BaseDbService(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         except NoResultFound:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail=f'{self.model.__name__.lower()} not found',
+                detail=f"{self.model.__name__.lower()} not found",
             )
 
     async def create(
@@ -128,7 +128,7 @@ class BaseDbService(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         await self.db_session.delete(db_obj)
         await self.db_session.commit()
         item_data = {
-            'status': True,
-            'message': f'The {self.model.__name__.lower()} has been deleted',
+            "status": True,
+            "message": f"The {self.model.__name__.lower()} has been deleted",
         }
         return JSONResponse(content=item_data)

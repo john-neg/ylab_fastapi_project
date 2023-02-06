@@ -10,4 +10,6 @@ pytest==7.2.1
 pytest-asyncio==0.20.3
 aiosqlite==0.18.0
 aioredis==2.0.1
-pre-commit==3.0.2
+celery==5.2.7
+pre-commit==3.0.4
+openpyxl~=3.1.0
