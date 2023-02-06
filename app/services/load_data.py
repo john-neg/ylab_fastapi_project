@@ -13,6 +13,10 @@ async def load_json_data(
     submenu_service: SubmenuCRUDService,
     dish_service: DishCRUDService,
 ) -> None:
+    """
+    The load_json_data function is used to load the initial data into the
+    database.
+    """
     path = os.path.join(BASEDIR, "app/db/data/db_data.json")
     with open(path) as file:
         load_data = json.loads(file.read())

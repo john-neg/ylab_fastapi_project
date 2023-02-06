@@ -81,8 +81,7 @@ class TestSubmenu(BaseApiCRUDTests):
 class TestDish(BaseApiCRUDTests):
     menu_id: str = "f47d47e4-efb5-4700-8147-ddcc5987b1fc"
     submenu_id: str = "127c9770-456c-478d-a086-e8e313e64d68"
-    url: str = f"{settings.API_V1_STR}/menus/{menu_id}"
-    f"/submenus/{submenu_id}/dishes/"
+    url: str = f"{settings.API_V1_STR}/menus/{menu_id}/submenus/{submenu_id}/dishes/"
     name: str = "dish"
     required_fields: tuple = ("title", "description", "price")
     db_table = Dish

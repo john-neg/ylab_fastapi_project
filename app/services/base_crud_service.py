@@ -86,7 +86,7 @@ class BaseCRUDService(
         """
         obj = await self.db_service.update(item_id, item_update_schema)
         item = self.process_db_data(obj)
-        await self.cache.set(str(obj.id), item)
+        await self.cache.set(str(item_id), item)
         await self.cache.delete(self.items_cache_list)
         return item
 

@@ -66,6 +66,8 @@ class Settings(BaseSettings):
 class ExcelStyle:
     """Styles for Excel file report."""
 
+    FileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+
     ThinBorder = Side(style="thin", color="000000")
     ThickBorder = Side(style="thick", color="000000")
     AllBorder = Border(

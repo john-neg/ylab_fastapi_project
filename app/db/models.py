@@ -48,7 +48,7 @@ class DefaultUpdateBase(DefaultBase):
     description: str | None
 
 
-class Menu(DefaultUUIDBase, DefaultModelBase, table=True):
+class Menu(DefaultUUIDBase, DefaultModelBase, table=True):  # type: ignore
     """Menu model class."""
 
     submenus: list["Submenu"] = Relationship(
@@ -88,7 +88,7 @@ class MenuUpdate(DefaultUpdateBase):
         }
 
 
-class Submenu(DefaultUUIDBase, DefaultModelBase, table=True):
+class Submenu(DefaultUUIDBase, DefaultModelBase, table=True):  # type: ignore
     """Submenu model class."""
 
     menu_id: UUID4 = Field(foreign_key="menu.id", nullable=False, index=True)

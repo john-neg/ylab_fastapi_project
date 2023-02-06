@@ -39,7 +39,7 @@ class BaseDbService(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         objs: list[ModelType] = result.scalars().all()
         return objs
 
-    async def get(self, id_: UUID4) -> ModelType | None:
+    async def get(self, id_: UUID4) -> ModelType:
         """
         The get function is used to retrieve a single object from the database.
         It takes an id and returns the corresponding object, or raises an
@@ -55,7 +55,7 @@ class BaseDbService(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         statement = select(self.model).where(self.model.id == id_)
         result = await self.db_session.execute(statement)
         try:
-            obj: ModelType | None = result.scalar_one()
+            obj: ModelType = result.scalar_one()
             return obj
         except NoResultFound:
             raise HTTPException(
@@ -67,7 +67,7 @@ class BaseDbService(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         self,
         obj: CreateSchemaType,
         **kwargs,
-    ) -> ModelType | None:
+    ) -> ModelType:
         """
         The create function makes a new object of the type specified in the
         CreateSchemaType parameter. It takes an argument of obj which is an
@@ -89,7 +89,7 @@ class BaseDbService(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         self,
         id_: UUID4,
         obj: UpdateSchemaType,
-    ) -> ModelType | None:
+    ) -> ModelType:
         """
         The update function updates an existing object in the database.
         It takes two arguments, id_ and obj. The id_ argument is the unique

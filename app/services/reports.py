@@ -5,6 +5,10 @@ from app.services.menu import MenuModelService
 
 
 async def get_menus_report_data(db_session: AsyncSession) -> list[dict]:
+    """
+    The get_menus_report_data function returns a json compatible list of
+    dictionaries, related to Menu, Submenu and Dish models data.
+    """
     db_service = MenuModelService(Menu, db_session)
     menus_list = await db_service.list()
     menus_report_data = [

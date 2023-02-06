@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.responses import FileResponse, JSONResponse
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from app.core.config import settings
+from app.core.config import ExcelStyle, settings
 from app.db.database import get_session
 from app.db.models import TaskDataResponse
 from app.services.reports import get_menus_report_data
@@ -41,7 +41,7 @@ async def get_menus_report(task_id: str) -> FileResponse:
         return FileResponse(
             path=path,
             filename="Menu.xlsx",
-            media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            media_type=ExcelStyle.FileType,
         )
     else:
         raise HTTPException(
