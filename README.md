@@ -35,6 +35,8 @@ Based on:
 
 https://github.com/john-neg/ylab_fastapi_project.git
 
+## Running Docker container
+
 ### Make .env file with database settings data in project root directory
 
 ```
@@ -42,14 +44,16 @@ SERVER_NAME=localhost
 DB_NAME=postgres
 POSTGRES_USER=postgres
 POSTGRES_PASSWORD=postgres
-DB_HOST=localhost
+DB_HOST=db
 DB_PORT=5432
-REDIS_HOST=localhost
-REDIS_PORT=9000
+REDIS_HOST=redis
+REDIS_PORT=6379
 REDIS_CACHE_TIME=3600
+RABBITMQ_HOST=rabbitmq
+RABBITMQ_PORT=5672
+RABBITMQ_DEFAULT_USER=rabbit
+RABBITMQ_DEFAULT_PASS=rabbit
 ```
-
-## Running Docker container
 
 ```sh
 docker-compose up -d
@@ -60,6 +64,24 @@ docker-compose -f docker-compose.tests.yaml up -d
 ```
 
 ## Running locally
+
+### Make .env file with database settings data in project root directory
+
+```
+SERVER_NAME=localhost
+DB_NAME=postgres
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+DB_HOST=localhost
+DB_PORT=5432
+REDIS_HOST=localhost
+REDIS_PORT=6379
+REDIS_CACHE_TIME=3600
+RABBITMQ_HOST=localhost
+RABBITMQ_PORT=5672
+RABBITMQ_DEFAULT_USER=rabbit
+RABBITMQ_DEFAULT_PASS=rabbit
+```
 
 ### Setup and activate venv
 

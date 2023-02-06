@@ -6,7 +6,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     env_file:
-      - .env.example
+      - .env
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready" ]
       interval: 5s
@@ -36,7 +36,7 @@ services:
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
     env_file:
-      - .env.example
+      - .env
     ports:
       - "5672:5672"
       - "15672:15672"
@@ -53,7 +53,7 @@ services:
       context: .
       dockerfile: Dockerfile
     env_file:
-      - .env.example
+      - .env
     entrypoint: >
       sh -c "
         echo 'Starting project...' &&
@@ -79,7 +79,7 @@ services:
     container_name: fastapi_project_celery_worker
     build: .
     env_file:
-      - .env.example
+      - .env
     command: celery -A app.core.celery_app:celery worker --loglevel=INFO -P threads
     links:
       - api
